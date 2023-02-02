@@ -32,3 +32,11 @@ func (host *Host) CheckHost(hashost string) (id int64, err error) {
 	id = host.ID
 	return
 }
+
+// check if has host
+func (host *Host) FindHost(hashost string) (hosts Host, err error) {
+	if err = Eloquent.First(&hosts, "host = ?", hashost).Error; err != nil {
+		return
+	}
+	return
+}

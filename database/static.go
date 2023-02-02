@@ -33,6 +33,13 @@ func (static *Static) CheckHasStatic(startTime, endTime, hostid int64, card stri
 	return
 }
 
+func (static *Static) GetStatic(startTime, endTime, hostid int64) (statics []Static, err error) {
+	if err = Eloquent.Find(&statics, "createdtime >= ? AND createdtime <= ? AND hostid = ?", startTime, endTime, hostid).Error; err != nil {
+		return
+	}
+	return
+}
+
 func (static *Static) UpCount() (statics Static, err error) {
 	static.Count = static.Count + 1
 	if err = Eloquent.Model(&statics).Updates(&static).Error; err != nil {

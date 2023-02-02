@@ -34,6 +34,7 @@ func InitRouter(SECRET_KEY, CODE string) *gin.Engine {
 		api.PUT("/upstatus", utils.VerifyMiddleware(), Admin.UpStatusAdmin)
 		api.POST("/loginadmin", Admin.Sgin)
 		api.GET("/putit", Static.Putit)
+		api.POST("/saveit", Static.SaveIt)
 	}
 
 	return router

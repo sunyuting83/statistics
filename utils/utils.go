@@ -132,6 +132,66 @@ func GetDateTime() (int64, int64) {
 	return startTime.Unix(), end.Unix()
 }
 
+func GetDateTimeUnix(start, end int64) (int64, int64) {
+	startTimeStr, endTimeStr := time.Unix(start, 0), time.Unix(end, 0)
+	startdate, enddate := startTimeStr.Format("2006-01-02"), endTimeStr.Format("2006-01-02")
+
+	loc, _ := time.LoadLocation("Local")
+
+	startDate, endDate := startdate+"_00:00:00", enddate+"_23:59:59"
+
+	startTime, _ := time.ParseInLocation("2006-01-02_15:04:05", startDate, loc)
+	endTime, _ := time.ParseInLocation("2006-01-02_15:04:05", endDate, loc)
+
+	return startTime.Unix(), endTime.Unix()
+}
+
+func GetDateStr(start int64) string {
+	startTimeStr := time.Unix(start, 0)
+	startdate := startTimeStr.Format("2006-01-02")
+
+	return startdate
+}
+
+// GetBetweenDates 根据开始日期和结束日期计算出时间段内所有日期
+// 参数为日期格式，如：2020-01-01
+func GetBetweenDates(sdate, edate int64) []string {
+	startTimeStr, endTimeStr := time.Unix(sdate, 0), time.Unix(edate, 0)
+	sdatea, edated := startTimeStr.Format("2006-01-02"), endTimeStr.Format("2006-01-02")
+	d := []string{}
+	timeFormatTpl := "2006-01-02 15:04:05"
+	if len(timeFormatTpl) != len(sdatea) {
+		timeFormatTpl = timeFormatTpl[0:len(sdatea)]
+	}
+	date, err := time.Parse(timeFormatTpl, sdatea)
+	if err != nil {
+		// 时间解析，异常
+		return d
+	}
+	date2, err := time.Parse(timeFormatTpl, edated)
+	if err != nil {
+		// 时间解析，异常
+		return d
+	}
+	if date2.Before(date) {
+		// 如果结束时间小于开始时间，异常
+		return d
+	}
+	// 输出日期格式固定
+	timeFormatTpl = "2006-01-02"
+	date2Str := date2.Format(timeFormatTpl)
+	d = append(d, date.Format(timeFormatTpl))
+	for {
+		date = date.AddDate(0, 0, 1)
+		dateStr := date.Format(timeFormatTpl)
+		d = append(d, dateStr)
+		if dateStr == date2Str {
+			break
+		}
+	}
+	return d
+}
+
 func MD5(a string) string {
 	data := []byte(a)
 	md5Ctx := md5.New()
