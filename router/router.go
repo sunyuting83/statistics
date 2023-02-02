@@ -35,6 +35,8 @@ func InitRouter(SECRET_KEY, CODE string) *gin.Engine {
 		api.POST("/loginadmin", Admin.Sgin)
 		api.GET("/putit", Static.Putit)
 		api.POST("/saveit", Static.SaveIt)
+		api.POST("/getDateData", Static.GetDateData)
+		api.GET("index", Static.GetIndexData)
 	}
 
 	return router

@@ -68,18 +68,20 @@ func MakeDateData(form FormSaveData) (d *DateData, err error) {
 	}
 	// fmt.Println(data)
 	var saveData []*SaveData
-	for _, item := range data {
+	for _, date := range datelist {
 		var (
 			d *SaveData = &SaveData{}
 		)
-		for _, date := range datelist {
+		for _, item := range data {
 			if date == utils.GetDateStr(item.CreatedTime) {
 				d.DateTime = date
 				d.Number = d.Number + item.Count
 				d.Data = append(d.Data, item)
 			}
 		}
-		saveData = append(saveData, d)
+		if len(d.DateTime) > 0 {
+			saveData = append(saveData, d)
+		}
 	}
 	d = &DateData{
 		Host:     Host.Host,

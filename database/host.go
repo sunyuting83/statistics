@@ -35,7 +35,15 @@ func (host *Host) CheckHost(hashost string) (id int64, err error) {
 
 // check if has host
 func (host *Host) FindHost(hashost string) (hosts Host, err error) {
-	if err = Eloquent.First(&hosts, "host = ?", hashost).Error; err != nil {
+	if err = Eloquent.First(&hosts, "id = ?", hashost).Error; err != nil {
+		return
+	}
+	return
+}
+
+func (host *Host) GetAllHost() (hosts []Host, err error) {
+	if err = Eloquent.
+		Find(&hosts).Error; err != nil {
 		return
 	}
 	return

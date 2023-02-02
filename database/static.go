@@ -48,6 +48,16 @@ func (static *Static) UpCount() (statics Static, err error) {
 	return
 }
 
+func (static *Static) GetTodayStatic(start, end int64) (statics []Static, err error) {
+	if err = Eloquent.
+		Select("id, count").
+		Where("createdtime >= ? AND createdtime <= ?", start, end).
+		Find(&statics).Error; err != nil {
+		return
+	}
+	return
+}
+
 // makePage make page
 func makePage(p int64) int64 {
 	p = p - 1
